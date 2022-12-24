@@ -5,7 +5,7 @@ const host = process.env.REDIS_HOST;
 const password = process.env.REDIS_PASSWORD;
 const port = process.env.REDIS_PORT;
 
-const redisUrl = `redis://:123456@35.232.62.139:9100`;
+const redisUrl = `redis://:${[password]}@${host}:${port}`;
 const redisClient = new Redis(redisUrl);
 
 async function getAll() {
