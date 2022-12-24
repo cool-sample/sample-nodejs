@@ -4,6 +4,11 @@ const host = process.env.REDIS_HOST;
 const password = process.env.REDIS_PASSWORD;
 const port = process.env.REDIS_PORT;
 
+console.log({
+    host: host,
+    password: password,
+    port: port
+});
 const client = redis.createClient({
   host: host,
   password: password,

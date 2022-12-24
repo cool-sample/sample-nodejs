@@ -25,6 +25,7 @@ app.get("/items", async (req, res) => {
     const values = await getAll();
     res.send(values);
   } catch (err) {
+    console.log(err)
     res.sendStatus(500);
   }
 });
@@ -35,6 +36,7 @@ app.get("/item", async (req, res) => {
     await createItem(key, value);
     res.sendStatus(200);
   } catch (err) {
+    console.log(err)
     res.sendStatus(500);
   }
 });
@@ -45,6 +47,7 @@ app.get("/item/:key", async (req, res) => {
     const value = await readItem(key);
     res.send(value);
   } catch (err) {
+    console.log(err)
     res.sendStatus(500);
   }
 });
@@ -56,6 +59,7 @@ app.get("/item/:key/update", async (req, res) => {
     await updateItem(key, value);
     res.sendStatus(200);
   } catch (err) {
+    console.log(err)
     res.sendStatus(500);
   }
 });
@@ -66,6 +70,7 @@ app.get("/item/:key/delete", async (req, res) => {
     await deleteItem(key);
     res.sendStatus(200);
   } catch (err) {
+    console.log(err)
     res.sendStatus(500);
   }
 });
