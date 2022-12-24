@@ -1,51 +1,47 @@
-const redis = require("redis");
+const util = require("util");
+const Redis = require("ioredis");
 
 const host = process.env.REDIS_HOST;
 const password = process.env.REDIS_PASSWORD;
 const port = process.env.REDIS_PORT;
 
-console.log({
-    host: host,
-    password: password,
-    port: port
-});
-const client = redis.createClient({
-  host: host,
-  password: password,
-  port: port
-});
-
+const redisUrl = `redis://:123456@35.232.62.139:9100`;
+const redisClient = new Redis(redisUrl);
 
 async function getAll() {
-  const keys = await client.keys("*");
-  return await Promise.all(keys.map((key) => readItem(key)));
+    try {
+        const keys = await redisClient.keys("*");
+
+        const values = await Promise.all(keys.map(async (key) => {
+            return {
+                key,
+                value: await redisClient.get(key),
+            }
+        }));
+        return values;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // Create a new item
 async function createItem(key, value) {
-  await client.set(key, value, redis.print);
+  await redisClient.set(key, value);
 }
 
 // Read an existing item
 async function readItem(key) {
-  return new Promise((resolve, reject) => {
-    client.get(key, (err, value) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(value);
-    });
-  });
+  return redisClient.get(key)
 }
 
 // Update an existing item
 async function updateItem(key, value) {
-  await client.set(key, value, redis.print);
+  await redisClient.set(key, value);
 }
 
 // Delete an existing item
 async function deleteItem(key) {
-  await client.del(key, redis.print);
+  await redisClient.del(key);
 }
 
 module.exports = {
